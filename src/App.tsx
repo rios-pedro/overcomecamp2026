@@ -164,18 +164,4 @@ const footerStyle: React.CSSProperties = {
   color: '#8d99ae',
 }
 
-// 2. Novo estilo adicionado para o botão
-const buttonStyle: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '12px 24px',
-  backgroundColor: '#e63946', // Cor combinando com o erro, mude para a principal do app se preferir
-  color: '#fff',
-  textDecoration: 'none',
-  borderRadius: '6px',
-  fontWeight: 600,
-  fontSize: '0.95rem',
-  transition: 'background-color 0.2s ease',
-  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-}
-
 export default App
