@@ -6,6 +6,7 @@ export interface TribeData {
 export interface MemberData {
   name: string;
   age?: number;
+  phone?: string;
 }
 
 // Mapeamento exato dos nomes que vêm da planilha para as chaves internas
@@ -82,11 +83,12 @@ export const fetchTribeMembers = async (): Promise<Record<string, MemberData[]>>
       const tribe = cols[0]?.toLowerCase();
       const memberName = cols[1];
       const age = cols[2] ? parseInt(cols[2], 10) : undefined;
+      const phone = cols[3] ? cols[3] : undefined;
 
       if (!tribe || !memberName) continue;
 
       if (!result[tribe]) result[tribe] = [];
-      result[tribe].push({ name: memberName, age: isNaN(age as number) ? undefined : age });
+      result[tribe].push({ name: memberName, age: isNaN(age as number) ? undefined : age, phone });
     }
 
     return result;

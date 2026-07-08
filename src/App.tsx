@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { Header } from './components/Header'
 import { TribeCard } from './components/TribeCard'
+import { DadosPage } from './components/DadosPage'
 import { fetchTribeScores, fetchTribeMembers, mockTribeScores, type TribeData, type MemberData } from './utils/sheets'
 
 function App() {
@@ -78,43 +80,47 @@ function App() {
     }))
 
   return (
-    <div style={containerStyle}>
-      <Header
-        onRefresh={() => loadData(true)}
-        isLoading={isLoading}
-        lastUpdated={lastUpdated}
-      />
-
-      {error && (
-        <div style={errorContainerStyle}>
-          <svg style={warningIconStyle} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span>{error}</span>
-        </div>
-      )}
-
-
-      {/* Placar de Cards */}
-      <main style={gridStyle}>
-        {displayedTribes.map((tribe) => (
-          <TribeCard
-            key={tribe.name}
-            name={tribe.name}
-            points={tribe.points}
-            maxPoints={maxPoints}
-            rank={tribe.rank}
-            isEqual={allPointsEqual}
-            members={members[tribe.name.toLowerCase()] ?? []}
+    <Routes>
+      <Route path="/dados" element={<DadosPage members={members} />} />
+      <Route path="/" element={
+        <div style={containerStyle}>
+          <Header
+            onRefresh={() => loadData(true)}
+            isLoading={isLoading}
+            lastUpdated={lastUpdated}
           />
-        ))}
-      </main>
 
-      <footer style={footerStyle}>
-        <p>© {new Date().getFullYear()} Overcome Camp - ICIR. Todos os direitos reservados.</p>
-        <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Porque Cristo venceu o mundo e nós vencemos n'Ele."</p>
-      </footer>
-    </div>
+          {error && (
+            <div style={errorContainerStyle}>
+              <svg style={warningIconStyle} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Placar de Cards */}
+          <main style={gridStyle}>
+            {displayedTribes.map((tribe) => (
+              <TribeCard
+                key={tribe.name}
+                name={tribe.name}
+                points={tribe.points}
+                maxPoints={maxPoints}
+                rank={tribe.rank}
+                isEqual={allPointsEqual}
+                members={members[tribe.name.toLowerCase()] ?? []}
+              />
+            ))}
+          </main>
+
+          <footer style={footerStyle}>
+            <p>© {new Date().getFullYear()} Overcome Camp - ICIR. Todos os direitos reservados.</p>
+            <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Porque Cristo venceu o mundo e nós vencemos n'Ele."</p>
+          </footer>
+        </div>
+      } />
+    </Routes>
   )
 }
 
