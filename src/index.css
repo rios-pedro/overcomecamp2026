@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Outfit:wght@300;400;600;800&display=swap');
+
+@font-face {
+  font-family: 'GC Grind';
+  src: url('/GC-GRIND.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: #ffffff;
+  background-color: #0b0c10;
+
+  /* Cores Temáticas das Tribos */
+  /* Judarion (Vermelho) */
+  --color-judarion: #ff2a2a;
+  --color-judarion-glow: rgba(255, 42, 42, 0.5);
+  --color-judarion-bg: rgba(255, 42, 42, 0.08);
+  --color-judarion-border: rgba(255, 42, 42, 0.25);
+
+  /* Danvar (Preto e Bronze) */
+  --color-danvar: #d4af37; /* Bronze / Ouro envelhecido */
+  --color-danvar-glow: rgba(212, 175, 55, 0.5);
+  --color-danvar-bg: rgba(20, 20, 20, 0.85); /* Fundo preto carbono */
+  --color-danvar-border: rgba(212, 175, 55, 0.3);
+
+  /* Benjarion (Cinza e Vermelho) */
+  --color-benjarion: #e63946; /* Vermelho vibrante */
+  --color-benjarion-glow: rgba(230, 57, 70, 0.5);
+  --color-benjarion-bg: rgba(74, 78, 105, 0.5); /* Cinza espacial como fundo */
+  --color-benjarion-border: rgba(230, 57, 70, 0.3);
+  --color-benjarion-base: #8d99ae; /* Cinza base */
+
+  /* Levior (Roxo) */
+  --color-levior: #9d4edd;
+  --color-levior-glow: rgba(157, 78, 221, 0.5);
+  --color-levior-bg: rgba(157, 78, 221, 0.08);
+  --color-levior-border: rgba(157, 78, 221, 0.25);
+
+  /* Efeitos Gerais */
+  --gold: #ffc300;
+  --gold-glow: rgba(255, 195, 0, 0.4);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 10%, #171821 0%, #08090c 80%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-epic {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #08090c;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f222e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2b3044;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(13, 14, 18, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-bg {
+  background: linear-gradient(90deg, #1f222e 25%, #2a2e3f 50%, #1f222e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Pulse animation for active glowing */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px -3px var(--glow-color);
+  }
+  50% {
+    box-shadow: 0 0 25px 2px var(--glow-color);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
