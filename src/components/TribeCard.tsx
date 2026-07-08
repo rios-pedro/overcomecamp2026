@@ -97,7 +97,7 @@ export const TribeCard: React.FC<TribeCardProps> = ({ name, points, maxPoints, r
             background: 'linear-gradient(135deg, #18191f 0%, #251618 100%)',
             borderColor: 'var(--color-benjarion-border)',
           },
-          badgeColor: '#e63946',
+          badgeColor: '#359bd6ff',
           logoPath: '/benjarion.png',
           fallbackIcon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="tribe-svg">
