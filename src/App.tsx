@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+// 1. Importamos o Link do react-router-dom
+import { Routes, Route, Link } from 'react-router-dom'
 import { Header } from './components/Header'
 import { TribeCard } from './components/TribeCard'
 import { DadosPage } from './components/DadosPage.tsx'
@@ -12,19 +13,15 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
-
-  // Função principal para carregar dados
   const loadData = async (showLoading = true) => {
     if (showLoading) setIsLoading(true)
     setError(null)
     try {
       const freshScores = await fetchTribeScores()
 
-      // Validação básica para garantir que vieram dados
       if (freshScores && freshScores.length > 0) {
         setScores(freshScores)
         setLastUpdated(new Date())
-        // Salva localmente para persistência offline
         localStorage.setItem('overcome_scores', JSON.stringify(freshScores))
         localStorage.setItem('overcome_last_updated', new Date().toISOString())
       } else {
@@ -34,7 +31,6 @@ function App() {
       console.warn('Erro ao atualizar dados, tentando carregar cache local...', err)
       setError('Modo Offline: Não foi possível conectar com a planilha. Exibindo dados locais.')
 
-      // Tenta recuperar do localStorage
       const cached = localStorage.getItem('overcome_scores')
       const cachedTime = localStorage.getItem('overcome_last_updated')
 
@@ -42,7 +38,6 @@ function App() {
         setScores(JSON.parse(cached))
         if (cachedTime) setLastUpdated(new Date(cachedTime))
       } else {
-        // Se não houver nada no cache, usa o mock padrão
         setScores(mockTribeScores)
         setLastUpdated(new Date())
       }
@@ -51,27 +46,20 @@ function App() {
     }
   }
 
-  // Efeito para carregar dados no mount inicial
   useEffect(() => {
     loadData(true)
-    // Carrega membros uma vez (dados estáticos, não precisam de auto-sync frequente)
     fetchTribeMembers().then(setMembers).catch(console.error)
 
-    // Configura o Auto-Sync de 60 segundos (60000ms)
     const interval = setInterval(() => {
-      loadData(false) // Sincroniza em background sem spinner obstrutivo
+      loadData(false)
     }, 60000)
 
     return () => clearInterval(interval)
   }, [])
 
-  // Encontra a maior pontuação para definir o limite proporcional das barras
   const maxPoints = Math.max(...scores.map((s) => s.points), 1)
-
-  // Detecta se todos os pontos são iguais (sem dados distintos para ranquear)
   const allPointsEqual = scores.length > 0 && scores.every((s) => s.points === scores[0].points)
 
-  // Ordena sempre por ranking (maior pontuação primeiro)
   const displayedTribes = [...scores]
     .sort((a, b) => b.points - a.points)
     .map((tribe, index) => ({
@@ -114,7 +102,13 @@ function App() {
             ))}
           </main>
 
+          {/* Alteração feita aqui no footer */}
           <footer style={footerStyle}>
+            <div style={{ marginBottom: '20px' }}>
+              <Link to="/dados" style={buttonStyle}>
+                Ver Dados Completos
+              </Link>
+            </div>
             <p>© {new Date().getFullYear()} Overcome Camp - ICIR. Todos os direitos reservados.</p>
             <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Porque Cristo venceu o mundo e nós vencemos n'Ele."</p>
           </footer>
@@ -124,7 +118,7 @@ function App() {
   )
 }
 
-// Estilos em JavaScript de Alta Qualidade
+// Estilos existentes mantidos...
 const containerStyle: React.CSSProperties = {
   maxWidth: '1200px',
   margin: '0 auto',
@@ -156,7 +150,6 @@ const warningIconStyle: React.CSSProperties = {
   flexShrink: 0,
 }
 
-
 const gridStyle: React.CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
@@ -174,6 +167,20 @@ const footerStyle: React.CSSProperties = {
   fontFamily: 'Outfit, sans-serif',
   fontSize: '0.85rem',
   color: '#8d99ae',
+}
+
+// 2. Novo estilo adicionado para o botão
+const buttonStyle: React.CSSProperties = {
+  display: 'inline-block',
+  padding: '12px 24px',
+  backgroundColor: '#e63946', // Cor combinando com o erro, mude para a principal do app se preferir
+  color: '#fff',
+  textDecoration: 'none',
+  borderRadius: '6px',
+  fontWeight: 600,
+  fontSize: '0.95rem',
+  transition: 'background-color 0.2s ease',
+  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
 }
 
 export default App
