@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Header } from './components/Header'
 import { TribeCard } from './components/TribeCard'
-import { DadosPage } from './components/DadosPage'
+import { DadosPage } from './components/DadosPage.tsx'
 import { fetchTribeScores, fetchTribeMembers, mockTribeScores, type TribeData, type MemberData } from './utils/sheets'
 
 function App() {
