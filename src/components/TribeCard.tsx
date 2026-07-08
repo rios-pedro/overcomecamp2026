@@ -157,6 +157,10 @@ export const TribeCard: React.FC<TribeCardProps> = ({ name, points, maxPoints, r
   // Estado para fallback de imagem
   const [imageError, setImageError] = useState(false)
 
+  // Separa líderes dos membros comuns
+  const leaders = members.filter((m) => m.isLeader)
+  const regularMembers = members.filter((m) => !m.isLeader)
+
   return (
     <div
       className="glass pulse-glow"
@@ -196,6 +200,15 @@ export const TribeCard: React.FC<TribeCardProps> = ({ name, points, maxPoints, r
 
       <div style={infoContainerStyle}>
         <h2 style={{ ...tribeNameStyle, color: config.primaryColor }}>{name}</h2>
+        {leaders.length > 0 && (
+          <div style={leadersWrapperStyle}>
+            {leaders.map((l, i) => (
+              <span key={i} style={leaderBadgeStyle(config.primaryColor)}>
+                👑 {l.name}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <div style={progressContainerStyle}>
@@ -210,17 +223,17 @@ export const TribeCard: React.FC<TribeCardProps> = ({ name, points, maxPoints, r
           ></div>
         </div>
         <div style={progressTextStyle}>
-          <span>Progresso</span>
-          <span>{Math.round(progressPercentage)}%</span>
+          {/*   <span>Progresso</span> */}
+          {/* <span>{Math.round(progressPercentage)}%</span> */}
         </div>
       </div>
 
-      {members.length > 0 && (
+      {regularMembers.length > 0 && (
         <div style={membersSectionStyle}>
           <div style={membersDividerStyle(config.primaryColor)} />
           <p style={membersTitleStyle}>Membros</p>
           <ul style={membersListStyle}>
-            {members.map((m, i) => (
+            {regularMembers.map((m, i) => (
               <li key={i} style={memberItemStyle}>
                 <span style={memberDotStyle(config.primaryColor)} />
                 {m.name}
@@ -334,6 +347,29 @@ const tribeNameStyle: React.CSSProperties = {
   textTransform: 'uppercase',
   textShadow: '0 2px 10px rgba(0,0,0,0.5)',
 }
+
+// --- Estilos dos líderes ---
+
+const leadersWrapperStyle: React.CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: '6px',
+  marginTop: '8px',
+}
+
+const leaderBadgeStyle = (color: string): React.CSSProperties => ({
+  fontFamily: 'Outfit, sans-serif',
+  fontSize: '0.72rem',
+  fontWeight: 600,
+  color: color,
+  background: `${color}1a`,
+  border: `1px solid ${color}55`,
+  borderRadius: '20px',
+  padding: '3px 10px',
+  letterSpacing: '0.3px',
+  textTransform: 'none',
+})
 
 const progressContainerStyle: React.CSSProperties = {
   width: '100%',
