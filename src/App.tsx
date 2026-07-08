@@ -17,7 +17,7 @@ function App() {
     setError(null)
     try {
       const freshScores = await fetchTribeScores()
-      
+
       // Validação básica para garantir que vieram dados
       if (freshScores && freshScores.length > 0) {
         setScores(freshScores)
@@ -31,11 +31,11 @@ function App() {
     } catch (err: any) {
       console.warn('Erro ao atualizar dados, tentando carregar cache local...', err)
       setError('Modo Offline: Não foi possível conectar com a planilha. Exibindo dados locais.')
-      
+
       // Tenta recuperar do localStorage
       const cached = localStorage.getItem('overcome_scores')
       const cachedTime = localStorage.getItem('overcome_last_updated')
-      
+
       if (cached) {
         setScores(JSON.parse(cached))
         if (cachedTime) setLastUpdated(new Date(cachedTime))
@@ -111,8 +111,8 @@ function App() {
       </main>
 
       <footer style={footerStyle}>
-        <p>© {new Date().getFullYear()} Overcome Camp - Jovens ICIR. Todos os direitos reservados.</p>
-        <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Separados para o Fogo"</p>
+        <p>© {new Date().getFullYear()} Overcome Camp - ICIR. Todos os direitos reservados.</p>
+        <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Porque Cristo venceu o mundo e nós vencemos n'Ele."</p>
       </footer>
     </div>
   )
