@@ -7,6 +7,7 @@ export interface MemberData {
   name: string;
   age?: number;
   phone?: string;
+  isLeader?: boolean;
 }
 
 // Mapeamento exato dos nomes que vêm da planilha para as chaves internas
@@ -24,7 +25,7 @@ export const fetchTribeScores = async (): Promise<TribeData[]> => {
     }
 
     const text = await response.text();
-    
+
     // Divide por linhas, limpa espaços vazios e quebras de linha carriage return
     const lines = text
       .split('\n')
@@ -56,6 +57,13 @@ export const fetchTribeScores = async (): Promise<TribeData[]> => {
   }
 };
 
+// Converte valores comuns de "sim/verdadeiro" vindos da planilha em boolean
+const parseBoolean = (raw?: string): boolean => {
+  if (!raw) return false;
+  const normalized = raw.trim().toLowerCase();
+  return ['true', 'sim', 'yes', '1', 'x', 'líder', 'lider'].includes(normalized);
+};
+
 // Busca a lista de membros por tribo da planilha de membros
 export const fetchTribeMembers = async (): Promise<Record<string, MemberData[]>> => {
   const spreadsheetId = '1pCcvw8tQj84CxnUYvV-g7lZLx5sPdYREmJPuGq5KTY0';
@@ -75,7 +83,7 @@ export const fetchTribeMembers = async (): Promise<Record<string, MemberData[]>>
 
     if (lines.length < 2) return {};
 
-    // Pula o cabeçalho (Tribo,Nome,Idade,Número)
+    // Pula o cabeçalho (Tribo,Nome,Idade,Número,Líder)
     const result: Record<string, MemberData[]> = {};
 
     for (let i = 1; i < lines.length; i++) {
@@ -84,11 +92,17 @@ export const fetchTribeMembers = async (): Promise<Record<string, MemberData[]>>
       const memberName = cols[1];
       const age = cols[2] ? parseInt(cols[2], 10) : undefined;
       const phone = cols[3] ? cols[3] : undefined;
+      const isLeader = parseBoolean(cols[4]);
 
       if (!tribe || !memberName) continue;
 
       if (!result[tribe]) result[tribe] = [];
-      result[tribe].push({ name: memberName, age: isNaN(age as number) ? undefined : age, phone });
+      result[tribe].push({
+        name: memberName,
+        age: isNaN(age as number) ? undefined : age,
+        phone,
+        isLeader,
+      });
     }
 
     return result;

@@ -56,11 +56,22 @@ const tribeConfigs: Record<string, {
 
 const TRIBE_ORDER = ['judarion', 'levior', 'benjarion', 'danvar']
 
+// Ordena para que os líderes apareçam primeiro na tabela
+const sortMembers = (members: MemberData[]): MemberData[] => {
+  return [...members].sort((a, b) => {
+    if (!!a.isLeader === !!b.isLeader) return 0
+    return a.isLeader ? -1 : 1
+  })
+}
+
 const TribeSection: React.FC<{ tribeKey: string; members: MemberData[] }> = ({ tribeKey, members }) => {
   const config = tribeConfigs[tribeKey]
   const [imgError, setImgError] = useState(false)
 
   if (!config) return null
+
+  const leaders = members.filter((m) => m.isLeader)
+  const orderedMembers = sortMembers(members)
 
   return (
     <section
@@ -119,7 +130,7 @@ const TribeSection: React.FC<{ tribeKey: string; members: MemberData[] }> = ({ t
         </div>
 
         {/* Nome da Tribo + contador */}
-        <div>
+        <div style={{ flex: '0 0 auto' }}>
           <h2
             style={{
               fontFamily: "'GC Grind', sans-serif",
@@ -146,6 +157,37 @@ const TribeSection: React.FC<{ tribeKey: string; members: MemberData[] }> = ({ t
           >
             {members.length} participante{members.length !== 1 ? 's' : ''}
           </p>
+
+          {/* Nomes dos líderes */}
+          {leaders.length > 0 && (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '6px',
+                marginTop: '8px',
+              }}
+            >
+              {leaders.map((l, i) => (
+                <span
+                  key={i}
+                  style={{
+                    fontFamily: 'Outfit, sans-serif',
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    color: config.primaryColor,
+                    background: `${config.primaryColor}1a`,
+                    border: `1px solid ${config.primaryColor}55`,
+                    borderRadius: '20px',
+                    padding: '3px 10px',
+                    letterSpacing: '0.3px',
+                  }}
+                >
+                  👑 {l.name}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Linha decorativa */}
@@ -181,10 +223,11 @@ const TribeSection: React.FC<{ tribeKey: string; members: MemberData[] }> = ({ t
                 <th style={{ ...theadCellStyle, textAlign: 'left', paddingLeft: '20px' }}>Nome</th>
                 <th style={theadCellStyle}>Idade</th>
                 <th style={theadCellStyle}>Telefone</th>
+                <th style={theadCellStyle}>Líder</th>
               </tr>
             </thead>
             <tbody>
-              {members.map((m, i) => (
+              {orderedMembers.map((m, i) => (
                 <MemberRow key={i} member={m} index={i} config={config} />
               ))}
             </tbody>
@@ -209,9 +252,11 @@ const MemberRow: React.FC<{
         borderTop: '1px solid rgba(255,255,255,0.04)',
         background: hovered
           ? `${config.primaryColor}11`
-          : index % 2 === 0
-          ? 'transparent'
-          : 'rgba(255,255,255,0.02)',
+          : member.isLeader
+            ? `${config.primaryColor}0a`
+            : index % 2 === 0
+              ? 'transparent'
+              : 'rgba(255,255,255,0.02)',
         transition: 'background 0.2s ease',
       }}
       onMouseEnter={() => setHovered(true)}
@@ -246,6 +291,10 @@ const MemberRow: React.FC<{
       <td style={{ ...tdStyle, color: 'rgba(255,255,255,0.55)', fontFamily: 'monospace', fontSize: '0.85rem' }}>
         {member.phone ?? '—'}
       </td>
+      {/* Líder */}
+      <td style={{ ...tdStyle, color: config.primaryColor }}>
+        {member.isLeader ? '👑' : '—'}
+      </td>
     </tr>
   )
 }
@@ -266,11 +315,11 @@ export const DadosPage: React.FC<DadosPageProps> = ({ members }) => {
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.07)'
-                ;(e.currentTarget as HTMLImageElement).style.filter = 'drop-shadow(0 4px 25px rgba(212,175,55,0.6))'
+                  ; (e.currentTarget as HTMLImageElement).style.filter = 'drop-shadow(0 4px 25px rgba(212,175,55,0.6))'
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)'
-                ;(e.currentTarget as HTMLImageElement).style.filter = 'drop-shadow(0 4px 15px rgba(0,0,0,0.6))'
+                  ; (e.currentTarget as HTMLImageElement).style.filter = 'drop-shadow(0 4px 15px rgba(0,0,0,0.6))'
               }}
             />
             <div style={logoGlowStyle} />
