@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 // 1. Importamos o Link do react-router-dom
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Header } from './components/Header'
 import { TribeCard } from './components/TribeCard'
 import { DadosPage } from './components/DadosPage.tsx'
