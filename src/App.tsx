@@ -104,11 +104,6 @@ function App() {
 
           {/* Alteração feita aqui no footer */}
           <footer style={footerStyle}>
-            <div style={{ marginBottom: '20px' }}>
-              <Link to="/dados" style={buttonStyle}>
-                Ver Dados Completos
-              </Link>
-            </div>
             <p>© {new Date().getFullYear()} Overcome Camp - ICIR. Todos os direitos reservados.</p>
             <p style={{ marginTop: '5px', fontSize: '0.75rem', opacity: 0.5 }}>"Porque Cristo venceu o mundo e nós vencemos n'Ele."</p>
           </footer>
