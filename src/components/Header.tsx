@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 interface HeaderProps {
   onRefresh: () => void;
@@ -33,15 +34,17 @@ export const Header: React.FC<HeaderProps> = ({ onRefresh, isLoading, lastUpdate
       </div>
 
       <div style={syncContainerStyle}>
-        <button
-          onClick={onRefresh}
-          disabled={isLoading}
-          style={{
-            ...buttonStyle,
-            opacity: isLoading ? 0.7 : 1,
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-          }}
-        >
+        <div style={actionsRowStyle}>
+          <Link to="/itens" style={navLinkStyle}>O que dá pontos?</Link>
+          <button
+            onClick={onRefresh}
+            disabled={isLoading}
+            style={{
+              ...buttonStyle,
+              opacity: isLoading ? 0.7 : 1,
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+            }}
+          >
           <svg
             style={{
               ...spinnerStyle,
@@ -56,8 +59,9 @@ export const Header: React.FC<HeaderProps> = ({ onRefresh, isLoading, lastUpdate
           >
             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
           </svg>
-          {isLoading ? 'Sincronizando...' : 'Atualizar Placar'}
-        </button>
+            {isLoading ? 'Sincronizando...' : 'Atualizar Placar'}
+          </button>
+        </div>
 
         <span style={timeStyle}>
           Última atualização: <strong style={{ color: '#ffb703' }}>{formatTime(lastUpdated)}</strong>
@@ -144,6 +148,31 @@ const syncContainerStyle: React.CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '10px',
+}
+
+const actionsRowStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+}
+
+const navLinkStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '12px 20px',
+  borderRadius: '30px',
+  background: 'rgba(255, 255, 255, 0.06)',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  color: '#fff',
+  textDecoration: 'none',
+  fontFamily: 'Outfit, sans-serif',
+  fontSize: '0.95rem',
+  fontWeight: 600,
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+  backdropFilter: 'blur(5px)',
 }
 
 const buttonStyle: React.CSSProperties = {
